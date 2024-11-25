@@ -2,7 +2,7 @@ const db = require('../database/staff_database')
 const {hash} = require('./conversion_functions');
 
 exports.login = async (req, res) => {
-    const result = await db.login(req.body.email, await hash(req.body.password));
+    const result = await db.login(req.body.email, hash(req.body.password));
 
     if (result === undefined) {
         res
