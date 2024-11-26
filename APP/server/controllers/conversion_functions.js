@@ -1,7 +1,6 @@
-const {createHash} = require("crypto");
+const {randomBytes, createHash} = require("crypto");
 
-function hash(string) {
-    const salt = process.env.SALT;
+function hash(string, salt = randomBytes(32).toString('hex')) {
     return createHash('sha256').update(salt + string).digest('hex');
 }
 
