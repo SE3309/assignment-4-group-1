@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-// Require the controllers WHICH WE DID NOT CREATE YET!!
-const test_controller = require('../controllers/test_controller');
+const client_controller = require('../controllers/client_controller');
+const staff_controller = require('../controllers/staff_controller');
 
-// A simple test url to check that all of our files are communicating correctly.
-router.get('/test', test_controller.test);
+router.post('/client-login', client_controller.login);
+router.post('/staff-login', staff_controller.login);
 
 module.exports = router;
