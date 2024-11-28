@@ -2,7 +2,7 @@ const db = require('../database/client_database');
 const {hash} = require('./conversion_functions');
 
 exports.login = async (req, res) => {
-  const result = await db.login(req.body.email, hash(req.body.password)); // TODO: change email to card number
+  const result = await db.login(req.body.card_number, hash(req.body.password));
 
   if (!result) {
     res.status(500).json({message: 'Internal server error'}).end();
