@@ -17,7 +17,7 @@ async function login(email, password) {
         [email, password]);
     await client.end();
 
-    return res.rows.length === 1 ? res.rows[0] : null;
+    return res.rows.length === 1 ? res.rows[0] : {};
   } catch (e) {
     console.error(e);
   }
