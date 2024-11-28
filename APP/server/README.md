@@ -80,29 +80,65 @@
 
 ```json
 {
-  "id": "c39a21ee-b5be-4ee7-850a-48b19ac84beb",
+  "id": "4267ccb3-42bf-463c-afe1-0662fbd6d926",
   "name": "Boris Vasilev",
   "phone_number": "+1 (647) 890-2718",
   "email": "borisonekenobi@gmail.com",
-  "client_id": "c223e525-df09-4040-8925-9411d73c4156",
-  "student_number": "251276924",
+  "client_id": "cf58a178-cee7-444a-b41f-bace931d3fae",
+  "student_number": 251276924,
   "bank_card": {
-    "id": "06906a81-c85d-4497-825d-6c9394445b25",
-    "expiry_date": "2029-11-28",
-    "card_number": "3378776579328348",
+    "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
+    "type_id": "0d8dbd75-2ec9-400c-99ae-5e0ca9759701",
+    "type": "Debit",
+    "expiry_date": "2029-11-28T05:00:00.000Z",
+    "number": "1680091720955179",
     "status": "active",
     "daily_limit": "$200.00"
   },
   "accounts": [
     {
-      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
-      "bank_card_id": "06906a81-c85d-4497-825d-6c9394445b25",
+      "id": "2fc78c8e-5063-4b66-b582-199c272edca3",
       "type_id": "03acb47d-94ef-41bb-9533-7606b2b81bdb",
       "type": "Chequing",
       "balance": "$0.00",
-      "status": "active",
-      "branch_id": "7b443372-a30a-4ae1-a401-727c075b3d15"
+      "status": "active"
     }
   ]
 }
 ```
+
+### Find Client
+
+`GET /api/client/:id`
+
+#### Response
+
+```json
+{
+  "id": "4267ccb3-42bf-463c-afe1-0662fbd6d926",
+  "name": "Boris Vasilev",
+  "phone_number": "+1 (647) 890-2718",
+  "email": "borisonekenobi@gmail.com",
+  "client_id": "cf58a178-cee7-444a-b41f-bace931d3fae",
+  "student_number": 251276924,
+  "bank_cards": [
+    {
+      "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
+      "type_id": "0d8dbd75-2ec9-400c-99ae-5e0ca9759701",
+      "type": "Debit",
+      "expiry_date": "2029-11-28T05:00:00.000Z",
+      "number": "1680091720955179",
+      "status": "active",
+      "daily_limit": "$200.00"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "2fc78c8e-5063-4b66-b582-199c272edca3",
+      "type_id": "03acb47d-94ef-41bb-9533-7606b2b81bdb",
+      "type": "Chequing",
+      "balance": "$0.00",
+      "status": "active"
+    }
+  ]
+}

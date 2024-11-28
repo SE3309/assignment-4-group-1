@@ -26,19 +26,23 @@ async function login(card_number, password) {
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
               client.client_id, client.student_number,
+              bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
+              card_type.card_type_id, card_type.name AS card_type_name,
               account.account_id, account.balance, account.status AS account_status,
-              bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit
+              account_type.account_type_id, account_type.name AS account_type_name
        FROM wob."user"
        JOIN wob.client ON wob."user".user_id = wob.client.user_id
-       LEFT JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
-       LEFT JOIN wob.account ON wob.bank_card.bank_card_id = wob.account.bank_card_id
+       JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
+       JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id
+       JOIN wob.account ON wob.bank_card.bank_card_id = wob.account.bank_card_id
+       JOIN wob.account_type ON wob.account.account_type_id = wob.account_type.account_type_id
        WHERE card_number = $1
          AND password = $2
          AND client.status = 'active'`,
         [card_number, password]);
     await client.end();
 
-    return res.rows.length === 1 ? res.rows[0] : {};
+    return res.rows;
   } catch (e) {
     console.error(e);
   }
@@ -87,8 +91,36 @@ async function create(new_client) {
   }
 }
 
+async function getById(client_id) {
+  try {
+    const client = createClient();
+    await client.connect();
+    const res = await client.query(
+      `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
+              client.client_id, client.student_number,
+              bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
+              card_type.card_type_id, card_type.name AS card_type_name,
+              account.account_id, account.balance, account.status AS account_status,
+              account_type.account_type_id, account_type.name AS account_type_name
+       FROM wob."user"
+       JOIN wob.client ON wob."user".user_id = wob.client.user_id
+       JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
+       JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id
+       JOIN wob.account ON wob.bank_card.bank_card_id = wob.account.bank_card_id
+       JOIN wob.account_type ON wob.account.account_type_id = wob.account_type.account_type_id
+       WHERE client.client_id = $1`,
+      [client_id]);
+    await client.end();
+
+    return res.rows;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 module.exports = {
   getSalt,
   login,
   create,
+  getById
 };
