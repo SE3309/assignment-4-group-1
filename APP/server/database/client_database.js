@@ -25,6 +25,41 @@ async function login(card_number, password) {
   }
 }
 
+async function create(new_client) {
+  try {
+    const address = new_client.address;
+    const user = new_client.user;
+
+    const client = createClient();
+    await client.connect();
+    const res = await client.query(
+      `WITH address AS (
+         INSERT INTO wob.address(street_number, street_name, city, province, postal_code)
+         VALUES($1, $2, $3, $4, $5)
+         RETURNING address_id
+       ), "user" AS (
+         INSERT INTO wob."user"(name, phone_number, email, date_of_birth, password, salt, address_id)
+         VALUES($6, $7, $8, $9, $10, $11, (SELECT address_id FROM address))
+         RETURNING user_id
+       )
+       INSERT INTO wob.client(student_number, status, user_id)
+       VALUES($12, 'active', (SELECT user_id FROM "user"))
+       RETURNING client_id;`,
+      [
+        address.street_number, address.street_name, address.city, address.province, address.postal_code,
+        user.name, user.phone_number, user.email, user.date_of_birth, user.password, user.salt,
+        new_client.student_number
+      ]
+    );
+    await client.end();
+
+    return res.rows.length === 1 ? res.rows[0] : {};
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 module.exports = {
   login,
+  create,
 };
