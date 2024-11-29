@@ -72,3 +72,43 @@ exports.create = async (req, res) => {
     res.status(200).json(staff).end();
   }
 }
+
+exports.findOne = async (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(400).json({message: 'Invalid input'}).end();
+    return;
+  }
+
+  const result = await db.getStaffMemberById(id);
+
+  if (!result) {
+    res.status(500).json({message: 'Internal server error'}).end();
+  } else if (!result.staff_id) {
+    res.status(404).json({message: 'Staff member not found'}).end();
+  } else {
+    const staff = {
+      id: result.staff_id,
+      branch_id: result.branch_id,
+      staff_role_id: result.staff_role_id,
+      user: {
+        id: result.id,
+        name: result.name,
+        phone_number: result.phone_number,
+        email: result.email,
+      },
+      address: {
+        id: result.address_id,
+        street_number: result.street_number,
+        street_name: result.street_name,
+        city: result.city,
+        province: result.province,
+        postal_code: result.postal_code,
+        country: result.country,
+      }
+    }
+
+    res.status(200).json(staff).end();
+  }
+}

@@ -22,5 +22,6 @@ router.delete('/client/:id', client_controller.delete);
 
 router.post('/staff-login', staff_controller.login);
 router.post('/staff', staff_controller.create);
+router.get('/staff/:id', staff_controller.findOne);
 
 module.exports = router;

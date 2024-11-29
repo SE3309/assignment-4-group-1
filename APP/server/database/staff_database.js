@@ -78,8 +78,31 @@ async function createStaffMember(staff) {
   }
 }
 
+async function getStaffMemberById(id) {
+  try {
+    const client = createClient();
+    await client.connect();
+    const res = await client.query(
+        `SELECT staff.staff_id, staff.branch_id, staff.staff_role_id,
+                "user".user_id, "user".name, "user".phone_number, "user".email, "user".date_of_birth,
+                address.address_id, address.street_number, address.street_name, address.city, address.province, address.postal_code, address.country
+         FROM wob.staff
+         JOIN wob."user" ON wob.staff.user_id = wob."user".user_id
+         JOIN wob.address ON wob."user".address_id = wob.address.address_id
+         WHERE staff_id = $1`,
+        [id]
+    );
+    await client.end();
+
+    return res.rows.length === 1 ? res.rows[0] : {};
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 module.exports = {
   getStaffSalt,
   login,
   createStaffMember,
+  getStaffMemberById
 };
