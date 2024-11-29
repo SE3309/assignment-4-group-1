@@ -67,7 +67,7 @@ expiry date of 5 years from the current date. The client will also have a Chequi
     "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
     "number": "1680091720955179",
     "pin": "0000",
-    "verification_value": "369.63670206002695"
+    "verification_value": "369"
   }
 }
 ```

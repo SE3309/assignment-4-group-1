@@ -61,7 +61,7 @@ exports.create = async (req, res) => {
   client.pin = hashed2[0];
   client.pin_salt = hashed2[1];
 
-  const verification_value = (Math.random() * 900 + 100).toString();
+  const verification_value = Math.floor(Math.random() * 900 + 100).toString();
   const hashed3 = hash(verification_value);
   client.verification_value = hashed3[0];
   client.verification_value_salt = hashed3[1];
