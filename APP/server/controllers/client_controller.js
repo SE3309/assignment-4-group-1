@@ -6,6 +6,11 @@ exports.login = async (req, res) => {
   const salt = await db.getSalt(req.body.card_number);
   const password = hash(req.body.password, salt)[0];
 
+  if (!card_number || !password) {
+    res.status(400).json({message: 'Invalid input'}).end();
+    return;
+  }
+
   const result = await db.login(card_number, password);
 
   if (!result) {
@@ -61,6 +66,13 @@ exports.create = async (req, res) => {
   client.verification_value = hashed3[0];
   client.verification_value_salt = hashed3[1];
 
+  if (!client.address.street_number || !client.address.street_name || !client.address.city || !client.address.province || !client.address.postal_code ||
+    !client.user.name || !client.user.phone_number || !client.user.email || !client.user.date_of_birth || !client.user.password || !client.user.salt ||
+    !client.student_number || !client.card_number || !client.pin || !client.pin_salt || !client.verification_value || !client.verification_value_salt) {
+    res.status(400).json({message: 'Invalid input'}).end();
+    return;
+  }
+
   const result = await db.create(client);
 
   if (!result) {
@@ -86,6 +98,11 @@ exports.create = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   const id = req.params.id;
+  if (!id) {
+    res.status(400).json({message: 'Invalid input'}).end();
+    return;
+  }
+
   const result = await db.getById(id);
 
   if (!result) {
@@ -122,5 +139,62 @@ exports.findOne = async (req, res) => {
         };
       })
     }).end();
+  }
+};
+
+exports.findAll = async (req, res) => {
+  const result = await db.getAll();
+
+  if (!result) {
+    res.status(500).json({message: 'Internal server error'}).end();
+  } else {
+    const clients = new Map();
+
+    const bank_card_ids = new Set();
+    const account_ids = new Set();
+
+    result.forEach(row => {
+      if (!clients.has(row.client_id)) {
+        clients.set(row.client_id, {
+          id: row.id,
+          name: row.name,
+          phone_number: row.phone_number,
+          email: row.email,
+          client_id: row.client_id,
+          student_number: row.student_number,
+          bank_cards: [],
+          accounts: [],
+        });
+      }
+
+      const client = clients.get(row.client_id);
+
+      if (!bank_card_ids.has(row.bank_card_id)) {
+        client.bank_cards.push({
+          id: row.bank_card_id,
+          expiry_date: row.expiry_date,
+          number: row.card_number,
+          status: row.card_status,
+          daily_limit: row.daily_limit,
+          type_id: row.card_type_id,
+          type: row.card_type_name,
+        });
+        bank_card_ids.add(row.bank_card_id);
+      }
+
+      if (!account_ids.has(row.account_id)) {
+        client.accounts.push({
+          id: row.account_id,
+          type_id: row.account_type_id,
+          type: row.account_type_name,
+          balance: row.balance,
+          status: row.account_status,
+          bank_card_id: row.bank_card_id,
+        });
+        account_ids.add(row.account_id);
+      }
+    });
+
+    res.status(200).json(Array.from(clients.values())).end();
   }
 };

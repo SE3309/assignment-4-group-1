@@ -118,9 +118,38 @@ async function getById(client_id) {
   }
 }
 
+async function getAll() {
+  try {
+    const client = createClient();
+    await client.connect();
+    const res = await client.query(
+      `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
+              client.client_id, client.student_number,
+              bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
+              card_type.card_type_id, card_type.name AS card_type_name,
+              account.account_id, account.balance, account.status AS account_status,
+              account_type.account_type_id, account_type.name AS account_type_name
+       FROM wob."user"
+       JOIN wob.client ON wob."user".user_id = wob.client.user_id
+       JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
+       JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id
+       JOIN wob.account ON wob.bank_card.bank_card_id = wob.account.bank_card_id
+       JOIN wob.account_type ON wob.account.account_type_id = wob.account_type.account_type_id`,
+      []
+    );
+    await client.end();
+
+    return res.rows;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
 module.exports = {
   getSalt,
   login,
   create,
-  getById
+  getById,
+  getAll
 };
