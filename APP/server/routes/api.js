@@ -24,5 +24,7 @@ router.post('/staff-login', staff_controller.login);
 router.post('/staff', staff_controller.create);
 router.get('/staff/:id', staff_controller.findOne);
 router.get('/staff', staff_controller.findAll);
+router.put('/staff/:id', staff_controller.update);
+router.delete('/staff/:id', staff_controller.delete);
 
 module.exports = router;

@@ -143,3 +143,27 @@ exports.findAll = async (req, res) => {
     res.status(200).json(staff).end();
   }
 }
+
+exports.update = async (req, res) => {
+  // TODO: Implement
+  res.status(501).json({message: 'Not implemented'}).end();
+}
+
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(400).json({message: 'Invalid input'}).end();
+    return;
+  }
+
+  const result = await db.deleteStaffMember(id);
+
+  if (!result) {
+    res.status(500).json({message: 'Internal server error'}).end();
+  } else if (!result.staff_id) {
+    res.status(404).json({message: 'Staff member not found'}).end();
+  } else {
+    res.status(200).json({message: 'Staff member deleted'}).end();
+  }
+}

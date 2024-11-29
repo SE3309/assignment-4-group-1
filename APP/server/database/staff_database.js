@@ -120,10 +120,35 @@ async function getAllStaffMembers() {
   }
 }
 
+async function updateStaffMember(id, staff) {
+  throw new Error('Not implemented');
+}
+
+async function deleteStaffMember(id) {
+  try {
+    const client = createClient();
+    await client.connect();
+    const res = await client.query(
+        `UPDATE wob.staff
+         SET status = 'inactive'
+         WHERE staff_id = $1
+         RETURNING staff_id`,
+        [id]
+    );
+    await client.end();
+
+    return res.rows.length === 1 ? res.rows[0] : {};
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 module.exports = {
   getStaffSalt,
   login,
   createStaffMember,
   getStaffMemberById,
-  getAllStaffMembers
+  getAllStaffMembers,
+  updateStaffMember,
+  deleteStaffMember
 };

@@ -431,3 +431,24 @@ number, email, date of birth, address ID, street number, street name, city, prov
     }
 ]
 ```
+
+### Update Staff
+
+`PUT /api/staff/:id`
+
+This hasn't been implemented yet. The response will be a 501 Not Implemented status code.
+
+#### Response
+
+<span style="color:red">501</span> Not Implemented
+
+### Delete Staff
+
+`DELETE /api/staff/:id`
+
+Marks the staff member with the given ID as `inactive` preventing them from logging in. The response will be a 204 No
+Content status code.
+
+#### Response
+
+<span style="color:green">204</span> No Content
