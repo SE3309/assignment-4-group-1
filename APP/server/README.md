@@ -196,7 +196,7 @@ student number, bank cards, and accounts.
 
 `GET /api/clients`
 
-Gets all clients. The response will include the client's ID, name, phone number, email, client ID, student number, bank
+Gets all clients. The response will include the clients' ID, name, phone number, email, client ID, student number, bank
 cards, and accounts.
 
 #### Response
@@ -396,4 +396,38 @@ country.
     "country": "Canada"
   }
 }
+```
+
+### Get All Staff
+
+`GET /api/staff`
+
+Gets all staff members. The response will include the staff members' ID, staff role ID, branch ID, user ID, name, phone
+number, email, date of birth, address ID, street number, street name, city, province, postal code, and country.
+
+#### Response
+
+```json
+[
+    {
+        "id": "6779751b-1c2e-47e8-ad94-615310195dd0",
+        "branch_id": "7b443372-a30a-4ae1-a401-727c075b3d15",
+        "staff_role_id": "cae1f4b3-42e7-44c8-bcc1-8c0ad1bb8a71",
+        "user": {
+            "id": "7b4d0275-55af-430e-b73e-cd723c3ef35e",
+            "name": "Rebecca Hellberg Nilsson",
+            "phone_number": "+1 (416) 522-7436",
+            "email": "rebeccahnilsson@gmail.com"
+        },
+        "address": {
+            "id": "1f02eb56-afb6-4f78-97c5-3c3ce4b676aa",
+            "street_number": 1118,
+            "street_name": "Beechnut Road",
+            "city": "Oakville",
+            "province": "Ontario",
+            "postal_code": "L6M1W8",
+            "country": "Canada"
+        }
+    }
+]
 ```

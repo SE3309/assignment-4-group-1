@@ -112,3 +112,34 @@ exports.findOne = async (req, res) => {
     res.status(200).json(staff).end();
   }
 }
+
+exports.findAll = async (req, res) => {
+  const result = await db.getAllStaffMembers();
+
+  if (!result) {
+    res.status(500).json({message: 'Internal server error'}).end();
+  } else {
+    const staff = result.map(r => ({
+      id: r.staff_id,
+      branch_id: r.branch_id,
+      staff_role_id: r.staff_role_id,
+      user: {
+        id: r.user_id,
+        name: r.name,
+        phone_number: r.phone_number,
+        email: r.email,
+      },
+      address: {
+        id: r.address_id,
+        street_number: r.street_number,
+        street_name: r.street_name,
+        city: r.city,
+        province: r.province,
+        postal_code: r.postal_code,
+        country: r.country,
+      }
+    }));
+
+    res.status(200).json(staff).end();
+  }
+}
