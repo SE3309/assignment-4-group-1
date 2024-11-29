@@ -1,8 +1,8 @@
-const {createClient} = require('./database_client');
+const dbClient = require('./database_client');
 
-async function getSalt(card_number) {
+async function getClientSalt(card_number) {
   try {
-    const client = createClient();
+    const client = dbClient.createClient();
     await client.connect();
     const res = await client.query(
       `SELECT salt
@@ -10,7 +10,8 @@ async function getSalt(card_number) {
        JOIN wob.client ON wob."user".user_id = wob.client.user_id
        JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
        WHERE card_number = $1`,
-      [card_number]);
+      [card_number]
+    );
     await client.end();
 
     return res.rows.length === 1 ? res.rows[0].salt : '';
@@ -21,7 +22,7 @@ async function getSalt(card_number) {
 
 async function login(card_number, password) {
   try {
-    const client = createClient();
+    const client = dbClient.createClient();
     await client.connect();
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
@@ -39,7 +40,8 @@ async function login(card_number, password) {
        WHERE card_number = $1
          AND password = $2
          AND client.status = 'active'`,
-        [card_number, password]);
+        [card_number, password]
+    );
     await client.end();
 
     return res.rows;
@@ -48,12 +50,12 @@ async function login(card_number, password) {
   }
 }
 
-async function create(new_client) {
+async function createClient(new_client) {
   try {
     const address = new_client.address;
     const user = new_client.user;
 
-    const client = createClient();
+    const client = dbClient.createClient();
     await client.connect();
     const res = await client.query(
       `WITH address AS (
@@ -91,9 +93,9 @@ async function create(new_client) {
   }
 }
 
-async function getById(client_id) {
+async function getClientById(client_id) {
   try {
-    const client = createClient();
+    const client = dbClient.createClient();
     await client.connect();
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
@@ -109,7 +111,8 @@ async function getById(client_id) {
        JOIN wob.account ON wob.bank_card.bank_card_id = wob.account.bank_card_id
        JOIN wob.account_type ON wob.account.account_type_id = wob.account_type.account_type_id
        WHERE client.client_id = $1`,
-      [client_id]);
+      [client_id]
+    );
     await client.end();
 
     return res.rows;
@@ -118,9 +121,9 @@ async function getById(client_id) {
   }
 }
 
-async function getAll() {
+async function getAllClients() {
   try {
-    const client = createClient();
+    const client = dbClient.createClient();
     await client.connect();
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
@@ -146,10 +149,35 @@ async function getAll() {
   }
 }
 
+async function updateClient(id, updated_client) {
+  throw new Error('Not implemented');
+}
+
+async function deleteClient(id) {
+  try {
+    const client = dbClient.createClient();
+    await client.connect();
+    const res = await client.query(
+      `UPDATE wob.client
+       SET status = 'inactive'
+       WHERE client_id = $1
+       RETURNING client_id`,
+      [id]
+    );
+    await client.end();
+
+    return res.rows.length === 1 ? res.rows[0] : {};
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 module.exports = {
-  getSalt,
+  getClientSalt,
   login,
-  create,
-  getById,
-  getAll
+  createClient,
+  getClientById,
+  getAllClients,
+  updateClient,
+  deleteClient
 };

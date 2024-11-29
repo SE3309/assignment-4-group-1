@@ -8,6 +8,8 @@ router.post('/client-login', client_controller.login);
 router.post('/client', client_controller.create);
 router.get('/client/:id', client_controller.findOne);
 router.get('/clients', client_controller.findAll);
+router.put('/client/:id', client_controller.update);
+router.delete('/client/:id', client_controller.delete);
 
 router.post('/staff-login', staff_controller.login);
 

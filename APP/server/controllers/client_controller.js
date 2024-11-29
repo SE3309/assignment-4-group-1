@@ -3,7 +3,7 @@ const {hash} = require('./conversion_functions');
 
 exports.login = async (req, res) => {
   const card_number = req.body.card_number;
-  const salt = await db.getSalt(req.body.card_number);
+  const salt = await db.getClientSalt(req.body.card_number);
   const password = hash(req.body.password, salt)[0];
 
   if (!card_number || !password) {
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
       })
     }).end();
   }
-};
+}
 
 exports.create = async (req, res) => {
   const client = req.body;
@@ -73,7 +73,7 @@ exports.create = async (req, res) => {
     return;
   }
 
-  const result = await db.create(client);
+  const result = await db.createClient(client);
 
   if (!result) {
     res.status(500).json({message: 'Internal server error'}).end();
@@ -86,15 +86,16 @@ exports.create = async (req, res) => {
     delete client.pin_salt;
     delete client.verification_value_salt;
 
-    client.pin = pin;
-    client.verification_value = verification_value;
     client.bank_card = {
-      id: result.bank_card_id, number: card_number,
+      id: result.bank_card_id,
+      number: card_number,
+      pin: pin,
+      verification_value: verification_value,
     };
 
     res.status(201).json(client).end();
   }
-};
+}
 
 exports.findOne = async (req, res) => {
   const id = req.params.id;
@@ -103,7 +104,7 @@ exports.findOne = async (req, res) => {
     return;
   }
 
-  const result = await db.getById(id);
+  const result = await db.getClientById(id);
 
   if (!result) {
     res.status(500).json({message: 'Internal server error'}).end();
@@ -140,10 +141,10 @@ exports.findOne = async (req, res) => {
       })
     }).end();
   }
-};
+}
 
 exports.findAll = async (req, res) => {
-  const result = await db.getAll();
+  const result = await db.getAllClients();
 
   if (!result) {
     res.status(500).json({message: 'Internal server error'}).end();
@@ -197,4 +198,27 @@ exports.findAll = async (req, res) => {
 
     res.status(200).json(Array.from(clients.values())).end();
   }
-};
+}
+
+exports.update = async (req, res) => {
+  // TODO: Implement
+  res.status(501).json({message: 'Not implemented'}).end();
+}
+
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    res.status(400).json({message: 'Invalid input'}).end();
+    return;
+  }
+
+  const result = await db.deleteClient(id);
+
+  if (!result) {
+    res.status(500).json({message: 'Internal server error'}).end();
+  } else if (!result.client_id) {
+    res.status(404).json({message: 'Client not found'}).end();
+  } else {
+    res.status(204).end();
+  }
+}
