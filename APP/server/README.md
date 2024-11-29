@@ -16,10 +16,11 @@
 
 `POST /api/client`
 
-Creates a new client with the given address, user, and student number. The response will include the client's address,
-user, student number, and a bank card with a generated ID, number, pin, and verification value. The pin will be 0000 and
-the verification value is a random number between 100 and 999. The client's bank card will have a type of Debit and an
-expiry date of 5 years from the current date. The client will also have a Chequing account with a balance of $0.00.
+Creates a new client with the given address, user, and student number. The response will include the client's ID, name,
+phone number, email, client ID, student number, bank card, and account. The bank card will have a 16 digit random
+number, pin, and verification value. The account will have a balance of $0.00. The bank card will have a daily limit of
+200.00. The bank card will expire in 5 years. The bank card type will be `Debit`. The account type will be `Chequing`.
+
 
 #### Request
 
@@ -48,26 +49,29 @@ expiry date of 5 years from the current date. The client will also have a Chequi
 
 ```json
 {
+  "id": "367f9e6f-f0d2-45c1-9766-8ec7277157dd",
+  "student_number": "251276924",
+  "user": {
+    "name": "Boris Vasilev",
+    "phone_number": "+1 (647) 890-2718",
+    "email": "borisonekenobi@gmail.com",
+    "date_of_birth": "2004-06-05",
+    "id": "fc5ce876-0194-447d-a793-e8069a49d2a4"
+  },
   "address": {
     "street_number": "2392",
     "street_name": "Cornerbrooke Crescent",
     "city": "Oakville",
     "province": "Ontario",
     "postal_code": "L6M4B5",
-    "country": "Canada"
+    "country": "Canada",
+    "id": "fbec2d7c-bc84-4d26-9062-e6038761ec61"
   },
-  "user": {
-    "name": "Boris Vasilev",
-    "phone_number": "+1 (647) 890-2718",
-    "email": "borisonekenobi@gmail.com",
-    "date_of_birth": "2004-06-05"
-  },
-  "student_number": "251276924",
   "bank_card": {
-    "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
-    "number": "1680091720955179",
+    "id": "77b64868-055f-4d37-a606-edfd2e1ade28",
+    "number": "9953810146034784",
     "pin": "0000",
-    "verification_value": "369"
+    "verification_value": "133"
   }
 }
 ```
@@ -92,28 +96,40 @@ number, email, client ID, student number, bank card, and all accounts linked to 
 
 ```json
 {
-  "id": "4267ccb3-42bf-463c-afe1-0662fbd6d926",
-  "name": "Boris Vasilev",
-  "phone_number": "+1 (647) 890-2718",
-  "email": "borisonekenobi@gmail.com",
-  "client_id": "cf58a178-cee7-444a-b41f-bace931d3fae",
+  "id": "367f9e6f-f0d2-45c1-9766-8ec7277157dd",
   "student_number": 251276924,
+  "user": {
+    "id": "fc5ce876-0194-447d-a793-e8069a49d2a4",
+    "name": "Boris Vasilev",
+    "phone_number": "+1 (647) 890-2718",
+    "email": "borisonekenobi@gmail.com"
+  },
+  "address": {
+    "id": "fbec2d7c-bc84-4d26-9062-e6038761ec61",
+    "street_number": 2392,
+    "street_name": "Cornerbrooke Crescent",
+    "city": "Oakville",
+    "province": "Ontario",
+    "postal_code": "L6M4B5",
+    "country": "Canada"
+  },
   "bank_card": {
-    "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
+    "id": "77b64868-055f-4d37-a606-edfd2e1ade28",
     "type_id": "0d8dbd75-2ec9-400c-99ae-5e0ca9759701",
     "type": "Debit",
-    "expiry_date": "2029-11-28T05:00:00.000Z",
-    "number": "1680091720955179",
+    "expiry_date": "2029-11-29T05:00:00.000Z",
+    "number": "9953810146034784",
     "status": "active",
     "daily_limit": "$200.00"
   },
   "accounts": [
     {
-      "id": "2fc78c8e-5063-4b66-b582-199c272edca3",
+      "id": "cc089bf3-f63d-4121-8f7f-cdfde67ecfe4",
       "type_id": "03acb47d-94ef-41bb-9533-7606b2b81bdb",
       "type": "Chequing",
       "balance": "$0.00",
-      "status": "active"
+      "status": "active",
+      "bank_card_id": "77b64868-055f-4d37-a606-edfd2e1ade28"
     }
   ]
 }
@@ -130,30 +146,42 @@ student number, bank cards, and accounts.
 
 ```json
 {
-  "id": "4267ccb3-42bf-463c-afe1-0662fbd6d926",
-  "name": "Boris Vasilev",
-  "phone_number": "+1 (647) 890-2718",
-  "email": "borisonekenobi@gmail.com",
-  "client_id": "cf58a178-cee7-444a-b41f-bace931d3fae",
+  "id": "367f9e6f-f0d2-45c1-9766-8ec7277157dd",
   "student_number": 251276924,
+  "user": {
+    "id": "fc5ce876-0194-447d-a793-e8069a49d2a4",
+    "name": "Boris Vasilev",
+    "phone_number": "+1 (647) 890-2718",
+    "email": "borisonekenobi@gmail.com"
+  },
+  "address": {
+    "id": "fbec2d7c-bc84-4d26-9062-e6038761ec61",
+    "street_number": 2392,
+    "street_name": "Cornerbrooke Crescent",
+    "city": "Oakville",
+    "province": "Ontario",
+    "postal_code": "L6M4B5",
+    "country": "Canada"
+  },
   "bank_cards": [
     {
-      "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
-      "type_id": "0d8dbd75-2ec9-400c-99ae-5e0ca9759701",
-      "type": "Debit",
-      "expiry_date": "2029-11-28T05:00:00.000Z",
-      "number": "1680091720955179",
+      "id": "77b64868-055f-4d37-a606-edfd2e1ade28",
+      "expiry_date": "2029-11-29T05:00:00.000Z",
+      "number": "9953810146034784",
       "status": "active",
-      "daily_limit": "$200.00"
+      "daily_limit": "$200.00",
+      "type_id": "0d8dbd75-2ec9-400c-99ae-5e0ca9759701",
+      "type": "Debit"
     }
   ],
   "accounts": [
     {
-      "id": "2fc78c8e-5063-4b66-b582-199c272edca3",
+      "id": "cc089bf3-f63d-4121-8f7f-cdfde67ecfe4",
       "type_id": "03acb47d-94ef-41bb-9533-7606b2b81bdb",
       "type": "Chequing",
       "balance": "$0.00",
-      "status": "active"
+      "status": "active",
+      "bank_card_id": "77b64868-055f-4d37-a606-edfd2e1ade28"
     }
   ]
 }
@@ -171,17 +199,28 @@ student number, bank cards, and accounts.
 ```json
 [
   {
-    "id": "4267ccb3-42bf-463c-afe1-0662fbd6d926",
-    "name": "Boris Vasilev",
-    "phone_number": "+1 (647) 890-2718",
-    "email": "borisonekenobi@gmail.com",
-    "client_id": "cf58a178-cee7-444a-b41f-bace931d3fae",
+    "id": "367f9e6f-f0d2-45c1-9766-8ec7277157dd",
     "student_number": 251276924,
+    "user": {
+      "id": "fc5ce876-0194-447d-a793-e8069a49d2a4",
+      "name": "Boris Vasilev",
+      "phone_number": "+1 (647) 890-2718",
+      "email": "borisonekenobi@gmail.com"
+    },
+    "address": {
+      "id": "fbec2d7c-bc84-4d26-9062-e6038761ec61",
+      "street_number": 2392,
+      "street_name": "Cornerbrooke Crescent",
+      "city": "Oakville",
+      "province": "Ontario",
+      "postal_code": "L6M4B5",
+      "country": "Canada"
+    },
     "bank_cards": [
       {
-        "id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c",
-        "expiry_date": "2029-11-28T05:00:00.000Z",
-        "number": "1680091720955179",
+        "id": "77b64868-055f-4d37-a606-edfd2e1ade28",
+        "expiry_date": "2029-11-29T05:00:00.000Z",
+        "number": "9953810146034784",
         "status": "active",
         "daily_limit": "$200.00",
         "type_id": "0d8dbd75-2ec9-400c-99ae-5e0ca9759701",
@@ -190,12 +229,12 @@ student number, bank cards, and accounts.
     ],
     "accounts": [
       {
-        "id": "2fc78c8e-5063-4b66-b582-199c272edca3",
+        "id": "cc089bf3-f63d-4121-8f7f-cdfde67ecfe4",
         "type_id": "03acb47d-94ef-41bb-9533-7606b2b81bdb",
         "type": "Chequing",
         "balance": "$0.00",
         "status": "active",
-        "bank_card_id": "7b86fbf8-2e12-49f2-ae07-4e04315a0e6c"
+        "bank_card_id": "77b64868-055f-4d37-a606-edfd2e1ade28"
       }
     ]
   }

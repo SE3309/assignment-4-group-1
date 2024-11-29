@@ -26,12 +26,14 @@ async function login(card_number, password) {
     await client.connect();
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
+              address.address_id, address.street_number, address.street_name, address.city, address.province, address.postal_code, address.country,
               client.client_id, client.student_number,
               bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
               card_type.card_type_id, card_type.name AS card_type_name,
               account.account_id, account.balance, account.status AS account_status,
               account_type.account_type_id, account_type.name AS account_type_name
        FROM wob."user"
+       JOIN wob.address ON wob."user".address_id = wob.address.address_id
        JOIN wob.client ON wob."user".user_id = wob.client.user_id
        JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
        JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id
@@ -77,7 +79,7 @@ async function createClient(new_client) {
        )
        INSERT INTO wob.account (bank_card_id, account_type_id, balance, status, branch_id)
        VALUES ((SELECT bank_card_id FROM bank_card), (SELECT account_type_id FROM wob.account_type WHERE name = 'Chequing'), 0, 'active', (SELECT branch_id FROM wob.branch LIMIT 1))
-       RETURNING (SELECT bank_card_id FROM bank_card);`,
+       RETURNING (SELECT address_id FROM address), (SELECT user_id FROM "user"), (SELECT client_id FROM client), (SELECT bank_card_id FROM bank_card);`,
       [
         address.street_number, address.street_name, address.city, address.province, address.postal_code,
         user.name, user.phone_number, user.email, user.date_of_birth, user.password, user.salt,
@@ -99,12 +101,14 @@ async function getClientById(client_id) {
     await client.connect();
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
+              address.address_id, address.street_number, address.street_name, address.city, address.province, address.postal_code, address.country,
               client.client_id, client.student_number,
               bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
               card_type.card_type_id, card_type.name AS card_type_name,
               account.account_id, account.balance, account.status AS account_status,
               account_type.account_type_id, account_type.name AS account_type_name
        FROM wob."user"
+       JOIN wob.address ON wob."user".address_id = wob.address.address_id
        JOIN wob.client ON wob."user".user_id = wob.client.user_id
        JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
        JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id
@@ -127,12 +131,14 @@ async function getAllClients() {
     await client.connect();
     const res = await client.query(
       `SELECT "user".user_id  AS id, "user".name, "user".phone_number, "user".email,
+              address.address_id, address.street_number, address.street_name, address.city, address.province, address.postal_code, address.country,
               client.client_id, client.student_number,
               bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
               card_type.card_type_id, card_type.name AS card_type_name,
               account.account_id, account.balance, account.status AS account_status,
               account_type.account_type_id, account_type.name AS account_type_name
        FROM wob."user"
+       JOIN wob.address ON wob."user".address_id = wob.address.address_id
        JOIN wob.client ON wob."user".user_id = wob.client.user_id
        JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
        JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id

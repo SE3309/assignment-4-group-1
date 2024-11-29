@@ -19,12 +19,23 @@ exports.login = async (req, res) => {
     res.status(401).json({message: 'Invalid card number or password'}).end();
   } else {
     res.status(200).json({
-      id: result[0].id,
-      name: result[0].name,
-      phone_number: result[0].phone_number,
-      email: result[0].email,
-      client_id: result[0].client_id,
+      id: result[0].client_id,
       student_number: result[0].student_number,
+      user: {
+        id: result[0].id,
+        name: result[0].name,
+        phone_number: result[0].phone_number,
+        email: result[0].email,
+      },
+      address: {
+        id: result[0].address_id,
+        street_number: result[0].street_number,
+        street_name: result[0].street_name,
+        city: result[0].city,
+        province: result[0].province,
+        postal_code: result[0].postal_code,
+        country: result[0].country,
+      },
       bank_card: {
         id: result[0].bank_card_id,
         type_id: result[0].card_type_id,
@@ -40,7 +51,8 @@ exports.login = async (req, res) => {
           type_id: row.account_type_id,
           type: row.account_type_name,
           balance: row.balance,
-          status: row.account_status
+          status: row.account_status,
+          bank_card_id: row.bank_card_id,
         };
       })
     }).end();
@@ -83,9 +95,14 @@ exports.create = async (req, res) => {
     delete client.card_number;
     delete client.user.password;
     delete client.user.salt;
+    delete client.pin;
     delete client.pin_salt;
+    delete client.verification_value;
     delete client.verification_value_salt;
 
+    client.id = result.client_id;
+    client.address.id = result.address_id;
+    client.user.id = result.user_id;
     client.bank_card = {
       id: result.bank_card_id,
       number: card_number,
@@ -112,12 +129,23 @@ exports.findOne = async (req, res) => {
     res.status(404).json({message: 'Client not found'}).end();
   } else {
     res.status(200).json({
-      id: result[0].id,
-      name: result[0].name,
-      phone_number: result[0].phone_number,
-      email: result[0].email,
-      client_id: result[0].client_id,
+      id: result[0].client_id,
       student_number: result[0].student_number,
+      user: {
+        id: result[0].id,
+        name: result[0].name,
+        phone_number: result[0].phone_number,
+        email: result[0].email,
+      },
+      address: {
+        id: result[0].address_id,
+        street_number: result[0].street_number,
+        street_name: result[0].street_name,
+        city: result[0].city,
+        province: result[0].province,
+        postal_code: result[0].postal_code,
+        country: result[0].country,
+      },
       bank_cards: result.map(row => {
         return {
           id: row.bank_card_id,
@@ -157,12 +185,23 @@ exports.findAll = async (req, res) => {
     result.forEach(row => {
       if (!clients.has(row.client_id)) {
         clients.set(row.client_id, {
-          id: row.id,
-          name: row.name,
-          phone_number: row.phone_number,
-          email: row.email,
-          client_id: row.client_id,
+          id: row.client_id,
           student_number: row.student_number,
+          user: {
+            id: row.id,
+            name: row.name,
+            phone_number: row.phone_number,
+            email: row.email,
+          },
+          address: {
+            id: row.address_id,
+            street_number: row.street_number,
+            street_name: row.street_name,
+            city: row.city,
+            province: row.province,
+            postal_code: row.postal_code,
+            country: row.country,
+          },
           bank_cards: [],
           accounts: [],
         });
