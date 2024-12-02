@@ -3,13 +3,21 @@ import {Link} from 'react-router-dom';
 import './Auth.css';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', {email, password});
-    // Add API integration here
+    const res = await fetch('http://localhost:3000/api/client-login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({card_number: cardNumber, password: password})
+    });
+    if (res.ok) {
+      const data = await res.json();
+      sessionStorage.setItem('client', JSON.stringify(data));
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -17,11 +25,11 @@ const Login = () => {
       <h1>Login</h1>
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
-          <label>Email:</label>
+          <label>Card Number:</label>
           <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              // type="email"
+              value={cardNumber}
+              onChange={(e) => setCardNumber(e.target.value)}
               required
           />
         </div>
