@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import ClientDashboard from './pages/ClientDashboard';
+import StaffDashboard from './pages/StaffDashboard';
+import Transfer from './pages/Transfer';
+import ApplyLoan from './pages/ApplyLoan';
+import TransactionHistory from './pages/TransactionHistory';
+import Statement from './pages/Statement';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp'; // Import Sign Up
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route path="/staff-dashboard" element={<StaffDashboard />} />
+        <Route path="/transfer" element={<Transfer />} />
+        <Route path="/apply-loan" element={<ApplyLoan />} />
+        <Route path="/transactions" element={<TransactionHistory />} />
+        <Route path="/statement" element={<Statement />} />
+        <Route path="/login" element={<Login />} /> {/* Login Route */}
+        <Route path="/signup" element={<SignUp />} /> {/* Sign Up Route */}
+      </Routes>
+    </Router>
   );
 }
 
