@@ -13,6 +13,9 @@
   - [Create Staff](#create-staff)
   - [Login](#staff-login)
   - [Find Staff](#find-staff)
+  - [Get All Staff](#get-all-staff)
+  - [Update Staff](#update-staff)
+  - [Delete Staff](#delete-staff)
 
 ## Client API
 

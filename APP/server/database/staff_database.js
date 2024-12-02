@@ -53,7 +53,7 @@ async function createStaffMember(staff) {
     await client.connect();
     const res = await client.query(
         `WITH address AS (
-            INSERT INTO wob.address (street_number, street_name, city, province, postal_code)
+           INSERT INTO wob.address (street_number, street_name, city, province, postal_code)
            VALUES ($1, $2, $3, $4, $5)
            RETURNING address_id
          ), "user" AS (
