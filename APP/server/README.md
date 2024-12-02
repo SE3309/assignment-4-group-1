@@ -455,3 +455,39 @@ Content status code.
 #### Response
 
 <span style="color:green">204</span> No Content
+
+## Funds Transfer API
+
+### Transfer Funds
+
+`POST /api/transfer`
+
+Transfers funds from one account to another account.
+
+#### Request
+
+```json
+{
+  "source_account_id": "cc089bf3-f63d-4121-8f7f-cdfde67ecfe4",
+  "destination_account_id": "cc089bf3-f63d-4121-8f7f-cdfde67ecfe4",
+  "amount": 12.00
+}
+```
+
+#### Response
+
+<span style="color:green">200</span> Transfer Successful
+
+## Loan API
+
+### Create Loan Application
+
+#### Request
+
+```json
+{
+  "client_id": "367f9e6f-f0d2-45c1-9766-8ec7277157dd",
+  "amount": 1000.00,
+  "duration": 12
+}
+```
