@@ -4,26 +4,14 @@ import './StaffDashboard.css';
 const StaffDashboard = () => {
   const [clients, setClients] = useState([]);
 
-  useEffect(() => {
-    // Mock API call
-    const fetchClients = async () => {
-      const mockData = [
-        {
-          id: 1,
-          name: 'Alice Smith',
-          email: 'alice@example.com',
-          phone: '123-123-1234',
-        },
-        {
-          id: 2,
-          name: 'Bob Johnson',
-          email: 'bob@example.com',
-          phone: '987-654-3210',
-        }];
-      setTimeout(() => setClients(mockData), 500); // Simulate API delay
-    };
+  const fetchClients = async () => {
+    const res = await fetch('http://localhost:3000/api/clients');
+    return await res.json();
+  };
 
-    fetchClients().then(r => console.log(r));
+  useEffect(() => {
+    fetchClients().then(data => setClients(data));
+    console.log(clients);
   }, []);
 
   if (clients.length === 0) return <div>Loading...</div>;
@@ -43,20 +31,20 @@ const StaffDashboard = () => {
         </thead>
         <tbody>
         {clients.map((client) => (<tr key={client.id}>
-              <td>{client.name}</td>
-              <td>{client.email}</td>
-              <td>{client.phone}</td>
+              <td>{client.user.name}</td>
+              <td>{client.user.email}</td>
+              <td>{client.user.phone_number}</td>
               <td>
                 <button className="btn"
-                        onClick={() => alert(`Viewing ${client.name}`)}>
+                        onClick={() => alert(`Viewing ${client.user.name}`)}>
                   View
                 </button>
                 <button className="btn"
-                        onClick={() => alert(`Editing ${client.name}`)}>
+                        onClick={() => alert(`Editing ${client.user.name}`)}>
                   Edit
                 </button>
                 <button className="btn danger"
-                        onClick={() => alert(`Deleting ${client.name}`)}>
+                        onClick={() => alert(`Deleting ${client.user.name}`)}>
                   Delete
                 </button>
               </td>
