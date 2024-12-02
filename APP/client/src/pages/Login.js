@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 import './Auth.css';
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Logging in with:', { email, password });
+    console.log('Logging in with:', {email, password});
     // Add API integration here
   };
 
@@ -19,19 +19,19 @@ const Login = () => {
         <div className="form-group">
           <label>Email:</label>
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
           />
         </div>
         <div className="form-group">
           <label>Password:</label>
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
           />
         </div>
         <button type="submit" className="btn">Login</button>

@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './ApplyLoan.css';
 
 const ApplyLoan = () => {
   const [formData, setFormData] = useState({
-    loanType: '',
-    loanAmount: '',
-    loanTerm: '',
-    reason: '',
+    loanType: '', loanAmount: '', loanTerm: '', reason: '',
   });
   const [message, setMessage] = useState('');
 
@@ -23,7 +20,7 @@ const ApplyLoan = () => {
       // Simulate API call
       const response = await fetch('/api/loans', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData),
       });
 
@@ -39,7 +36,7 @@ const ApplyLoan = () => {
 
   // Handle form data change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({...formData, [e.target.name]: e.target.value});
   };
 
   return (
@@ -49,10 +46,10 @@ const ApplyLoan = () => {
         <div className="form-group">
           <label>Loan Type:</label>
           <select
-            name="loanType"
-            value={formData.loanType}
-            onChange={handleChange}
-            required
+              name="loanType"
+              value={formData.loanType}
+              onChange={handleChange}
+              required
           >
             <option value="">Select Loan Type</option>
             <option value="personal">Personal Loan</option>
@@ -63,30 +60,30 @@ const ApplyLoan = () => {
         <div className="form-group">
           <label>Loan Amount:</label>
           <input
-            type="number"
-            name="loanAmount"
-            value={formData.loanAmount}
-            onChange={handleChange}
-            required
+              type="number"
+              name="loanAmount"
+              value={formData.loanAmount}
+              onChange={handleChange}
+              required
           />
         </div>
         <div className="form-group">
           <label>Loan Term (in years):</label>
           <input
-            type="number"
-            name="loanTerm"
-            value={formData.loanTerm}
-            onChange={handleChange}
-            required
+              type="number"
+              name="loanTerm"
+              value={formData.loanTerm}
+              onChange={handleChange}
+              required
           />
         </div>
         <div className="form-group">
           <label>Reason for Loan:</label>
           <textarea
-            name="reason"
-            value={formData.reason}
-            onChange={handleChange}
-            required
+              name="reason"
+              value={formData.reason}
+              onChange={handleChange}
+              required
           ></textarea>
         </div>
         <button type="submit" className="btn">

@@ -2,9 +2,7 @@ import axios from 'axios';
 
 export const transferFunds = async (fromAccountId, toAccountId, amount) => {
   const response = await axios.post('/api/transfer', {
-    fromAccountId,
-    toAccountId,
-    amount,
+    fromAccountId, toAccountId, amount,
   });
   return response.data;
 };

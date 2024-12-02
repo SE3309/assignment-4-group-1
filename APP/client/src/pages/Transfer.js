@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import './Transfer.css';
 
 const Transfer = () => {
   const [accounts, setAccounts] = useState([]);
   const [formData, setFormData] = useState({
-    sourceAccount: '',
-    destinationAccount: '',
-    amount: '',
+    sourceAccount: '', destinationAccount: '', amount: '',
   });
   const [message, setMessage] = useState('');
 
@@ -36,7 +34,7 @@ const Transfer = () => {
       // Simulate API call for fund transfer
       const response = await fetch('/api/transfer', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData),
       });
 
@@ -52,7 +50,7 @@ const Transfer = () => {
 
   // Handle form data change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({...formData, [e.target.name]: e.target.value});
   };
 
   return (
@@ -62,43 +60,41 @@ const Transfer = () => {
         <div className="form-group">
           <label>Source Account:</label>
           <select
-            name="sourceAccount"
-            value={formData.sourceAccount}
-            onChange={handleChange}
-            required
+              name="sourceAccount"
+              value={formData.sourceAccount}
+              onChange={handleChange}
+              required
           >
             <option value="">Select an account</option>
-            {accounts.map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.type} - ${account.balance}
-              </option>
-            ))}
+            {accounts.map(
+                (account) => (<option key={account.id} value={account.id}>
+                      {account.type} - ${account.balance}
+                    </option>))}
           </select>
         </div>
         <div className="form-group">
           <label>Destination Account:</label>
           <select
-            name="destinationAccount"
-            value={formData.destinationAccount}
-            onChange={handleChange}
-            required
+              name="destinationAccount"
+              value={formData.destinationAccount}
+              onChange={handleChange}
+              required
           >
             <option value="">Select an account</option>
-            {accounts.map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.type} - ${account.balance}
-              </option>
-            ))}
+            {accounts.map(
+                (account) => (<option key={account.id} value={account.id}>
+                      {account.type} - ${account.balance}
+                    </option>))}
           </select>
         </div>
         <div className="form-group">
           <label>Amount:</label>
           <input
-            type="number"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            required
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              required
           />
         </div>
         <button type="submit" className="btn">
