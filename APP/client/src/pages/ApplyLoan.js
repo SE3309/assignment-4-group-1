@@ -1,27 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './ApplyLoan.css';
 
 const ApplyLoan = () => {
   const [formData, setFormData] = useState({
-    loanType: '', loanAmount: '', loanTerm: '', reason: '',
+    type: '', amount: '', term: '', reason: '',
   });
+  const [clientId, setClientId] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (sessionStorage.getItem('client')) {
+      const client = JSON.parse(sessionStorage.getItem('client'));
+      setClientId(client.id);
+    } else {
+      window.location.href = '/login';
+    }
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.loanAmount <= 0) {
+    if (formData.amount <= 0) {
       setMessage('Loan amount must be greater than zero.');
       return;
     }
 
     try {
-      // Simulate API call
-      const response = await fetch('/api/loans', {
+      const response = await fetch('http://localhost:3000/api/loan', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData),
+        body: JSON.stringify({loan: formData, client_id: clientId}),
       });
 
       if (response.ok) {
@@ -36,6 +45,7 @@ const ApplyLoan = () => {
 
   // Handle form data change
   const handleChange = (e) => {
+    console.log(e);
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
@@ -46,8 +56,8 @@ const ApplyLoan = () => {
         <div className="form-group">
           <label>Loan Type:</label>
           <select
-              name="loanType"
-              value={formData.loanType}
+              name="type"
+              value={formData.type}
               onChange={handleChange}
               required
           >
@@ -61,8 +71,8 @@ const ApplyLoan = () => {
           <label>Loan Amount:</label>
           <input
               type="number"
-              name="loanAmount"
-              value={formData.loanAmount}
+              name="amount"
+              value={formData.amount}
               onChange={handleChange}
               required
           />
@@ -71,8 +81,8 @@ const ApplyLoan = () => {
           <label>Loan Term (in years):</label>
           <input
               type="number"
-              name="loanTerm"
-              value={formData.loanTerm}
+              name="term"
+              value={formData.term}
               onChange={handleChange}
               required
           />

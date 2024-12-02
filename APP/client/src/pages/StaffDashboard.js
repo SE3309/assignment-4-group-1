@@ -11,7 +11,6 @@ const StaffDashboard = () => {
 
   useEffect(() => {
     fetchClients().then(data => setClients(data));
-    console.log(clients);
   }, []);
 
   if (clients.length === 0) return <div>Loading...</div>;

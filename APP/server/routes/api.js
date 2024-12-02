@@ -23,4 +23,6 @@ router.delete('/staff/:id', staff_controller.delete);
 
 router.post('/transfer', transaction_controller.transfer);
 
+router.post('/loan', loan_controller.create);
+
 module.exports = router;
