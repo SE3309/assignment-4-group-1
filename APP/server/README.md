@@ -412,26 +412,26 @@ number, email, date of birth, address ID, street number, street name, city, prov
 
 ```json
 [
-    {
-        "id": "6779751b-1c2e-47e8-ad94-615310195dd0",
-        "branch_id": "7b443372-a30a-4ae1-a401-727c075b3d15",
-        "staff_role_id": "cae1f4b3-42e7-44c8-bcc1-8c0ad1bb8a71",
-        "user": {
-            "id": "7b4d0275-55af-430e-b73e-cd723c3ef35e",
-            "name": "Rebecca Hellberg Nilsson",
-            "phone_number": "+1 (416) 522-7436",
-            "email": "rebeccahnilsson@gmail.com"
-        },
-        "address": {
-            "id": "1f02eb56-afb6-4f78-97c5-3c3ce4b676aa",
-            "street_number": 1118,
-            "street_name": "Beechnut Road",
-            "city": "Oakville",
-            "province": "Ontario",
-            "postal_code": "L6M1W8",
-            "country": "Canada"
-        }
+  {
+    "id": "6779751b-1c2e-47e8-ad94-615310195dd0",
+    "branch_id": "7b443372-a30a-4ae1-a401-727c075b3d15",
+    "staff_role_id": "cae1f4b3-42e7-44c8-bcc1-8c0ad1bb8a71",
+    "user": {
+      "id": "7b4d0275-55af-430e-b73e-cd723c3ef35e",
+      "name": "Rebecca Hellberg Nilsson",
+      "phone_number": "+1 (416) 522-7436",
+      "email": "rebeccahnilsson@gmail.com"
+    },
+    "address": {
+      "id": "1f02eb56-afb6-4f78-97c5-3c3ce4b676aa",
+      "street_number": 1118,
+      "street_name": "Beechnut Road",
+      "city": "Oakville",
+      "province": "Ontario",
+      "postal_code": "L6M1W8",
+      "country": "Canada"
     }
+  }
 ]
 ```
 
@@ -486,8 +486,73 @@ Transfers funds from one account to another account.
 
 ```json
 {
-  "client_id": "367f9e6f-f0d2-45c1-9766-8ec7277157dd",
+  "type": "personal",
   "amount": 1000.00,
-  "duration": 12
+  "term": 12,
+  "reason": "I need to pay for my tuition."
 }
+```
+
+#### Response
+
+<span style="color:green">200</span> Loan application submitted successfully!
+
+## Statement API
+
+### Get Statement
+
+`GET /api/statement/`
+
+Gets all statements for the client with the given ID. The response will include the statement ID, account ID, closing
+balance, end date, account type ID, bank card ID, balance, branch ID, and status.
+
+#### Response
+
+```json
+[
+  {
+    "statement_id": "29cfad63-d59f-49d1-adf8-e2906d8e96db",
+    "account_id": "7463c19c-26e2-4daf-b865-23a891ed9f6e",
+    "closing_balance": "$120,000.00",
+    "end_date": "2024-11-30T05:00:00.000Z",
+    "account_type_id": "f5ce233a-1f2e-411d-bd7c-908fee05c069",
+    "bank_card_id": "ef444963-eb01-4812-ad82-c3a3b8347138",
+    "balance": "$36.00",
+    "branch_id": "588c4958-691f-4123-b98b-c130b9d72287",
+    "status": "active"
+  },
+  {
+    "statement_id": "7f2e777d-0d0d-4fb8-a370-d33dce997198",
+    "account_id": "7463c19c-26e2-4daf-b865-23a891ed9f6e",
+    "closing_balance": "$10,000.00",
+    "end_date": "2024-12-31T05:00:00.000Z",
+    "account_type_id": "f5ce233a-1f2e-411d-bd7c-908fee05c069",
+    "bank_card_id": "ef444963-eb01-4812-ad82-c3a3b8347138",
+    "balance": "$36.00",
+    "branch_id": "588c4958-691f-4123-b98b-c130b9d72287",
+    "status": "active"
+  },
+  {
+    "statement_id": "4d388d6c-cab3-41d1-86df-7441fa909dbf",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "closing_balance": "$1,234.00",
+    "end_date": "2024-11-30T05:00:00.000Z",
+    "account_type_id": "21dbdde7-71aa-49e3-9b7f-a37c603dd962",
+    "bank_card_id": "ef444963-eb01-4812-ad82-c3a3b8347138",
+    "balance": "$12.00",
+    "branch_id": "588c4958-691f-4123-b98b-c130b9d72287",
+    "status": "active"
+  },
+  {
+    "statement_id": "7f6e0f01-fb04-48ba-af58-febf992748f2",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "closing_balance": "$12,000.00",
+    "end_date": "2024-12-31T05:00:00.000Z",
+    "account_type_id": "21dbdde7-71aa-49e3-9b7f-a37c603dd962",
+    "bank_card_id": "ef444963-eb01-4812-ad82-c3a3b8347138",
+    "balance": "$12.00",
+    "branch_id": "588c4958-691f-4123-b98b-c130b9d72287",
+    "status": "active"
+  }
+]
 ```
