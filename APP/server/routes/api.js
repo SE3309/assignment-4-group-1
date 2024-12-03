@@ -25,4 +25,6 @@ router.post('/transfer', transaction_controller.transfer);
 
 router.post('/loan', loan_controller.create);
 
+router.get('/statement', statement_controller.findAll);
+
 module.exports = router;
