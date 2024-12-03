@@ -105,16 +105,19 @@ async function getClientById(client_id) {
               client.client_id, client.student_number,
               bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status AS card_status, bank_card.daily_limit,
               card_type.card_type_id, card_type.name AS card_type_name,
-              account.account_id, account.balance, account.status AS account_status,
-              account_type.account_type_id, account_type.name AS account_type_name
+              acc.account_id, acc.balance, acc.status AS account_status,
+              account_type.account_type_id, account_type.name AS account_type_name,
+              SUM(total.balance) AS total_account_balance
        FROM wob."user"
        JOIN wob.address ON wob."user".address_id = wob.address.address_id
        JOIN wob.client ON wob."user".user_id = wob.client.user_id
        JOIN wob.bank_card ON wob.client.client_id = wob.bank_card.client_id
        JOIN wob.card_type ON wob.bank_card.card_type_id = wob.card_type.card_type_id
-       JOIN wob.account ON wob.bank_card.bank_card_id = wob.account.bank_card_id
-       JOIN wob.account_type ON wob.account.account_type_id = wob.account_type.account_type_id
-       WHERE client.client_id = $1`,
+       JOIN wob.account acc ON wob.bank_card.bank_card_id = acc.bank_card_id
+       JOIN wob.account_type ON acc.account_type_id = wob.account_type.account_type_id
+       JOIN wob.account total ON wob.bank_card.bank_card_id = total.bank_card_id
+       WHERE client.client_id = $1
+       GROUP BY "user".user_id, "user".name, "user".phone_number, "user".email, address.address_id, address.street_number, address.street_name, address.city, address.province, address.postal_code, address.country, client.client_id, client.student_number, bank_card.bank_card_id, bank_card.expiry_date, bank_card.card_number, bank_card.status, bank_card.daily_limit, card_type.card_type_id, card_type.name, acc.account_id, acc.balance, acc.status, account_type.account_type_id, account_type.name;`,
       [client_id]
     );
     await client.end();

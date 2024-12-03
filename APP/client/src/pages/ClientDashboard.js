@@ -12,7 +12,10 @@ const ClientDashboard = () => {
   useEffect(() => {
     if (sessionStorage.getItem('client')) {
       const client = JSON.parse(sessionStorage.getItem('client'));
-      fetchClientData(client.id).then(data => setClientData(data));
+      fetchClientData(client.id).then(data => {
+        sessionStorage.setItem('client', JSON.stringify(data));
+        setClientData(data);
+      });
     } else {
       window.location.href = '/login';
     }
@@ -33,6 +36,7 @@ const ClientDashboard = () => {
                   <p><strong>Account Type:</strong> {account.type}</p>
                   <p><strong>Balance:</strong> {account.balance}</p>
                 </div>))}
+        <h3>Total Balance: {clientData.total_account_balance}</h3>
       </div>
       <div className="dashboard-actions">
         {clientData.accounts.length > 1 &&

@@ -157,6 +157,7 @@ exports.findOne = async (req, res) => {
           type: row.card_type_name,
         };
       }),
+      total_account_balance: result[0].total_account_balance,
       accounts: result.map(row => {
         return {
           id: row.account_id,

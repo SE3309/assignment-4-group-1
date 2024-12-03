@@ -78,7 +78,7 @@ const ApplyLoan = () => {
           />
         </div>
         <div className="form-group">
-          <label>Loan Term (in years):</label>
+          <label>Loan Term (in months):</label>
           <input
               type="number"
               name="term"

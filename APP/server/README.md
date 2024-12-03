@@ -182,6 +182,7 @@ student number, bank cards, and accounts.
       "type": "Debit"
     }
   ],
+  "total_account_balance": "$0.00",
   "accounts": [
     {
       "id": "cc089bf3-f63d-4121-8f7f-cdfde67ecfe4",

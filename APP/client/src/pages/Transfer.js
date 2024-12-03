@@ -41,10 +41,11 @@ const Transfer = () => {
 
       if (response.ok) {
         setMessage('Transfer successful!');
-        const sourceAccount = accounts.find((account) => account.id === formData.sourceAccount);
-        const destinationAccount = accounts.find((account) => account.id === formData.destinationAccount);
-        sourceAccount.balance = (parseFloat(sourceAccount.balance) - parseFloat(formData.amount)).toFixed(2);
-        destinationAccount.balance = (parseFloat(destinationAccount.balance) + parseFloat(formData.amount)).toFixed(2);
+        const client = JSON.parse(sessionStorage.getItem('client'));
+        const response = await fetch(`http://localhost:3000/api/client/${client.id}`);
+        const data = await response.json();
+
+        sessionStorage.setItem('client', JSON.stringify(data));
       } else {
         setMessage('Failed to complete the transfer. Please try again.');
       }
@@ -55,6 +56,9 @@ const Transfer = () => {
 
   // Handle form data change
   const handleChange = (e) => {
+    if (e.target.name === 'amount' && parseFloat(e.target.value) <= 0) e.target.value = "0.01";
+    if (e.target.name === 'amount' && parseFloat(e.target.value) > 10_000) e.target.value = "10000.00";
+
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
@@ -98,6 +102,8 @@ const Transfer = () => {
               type="number"
               name="amount"
               value={formData.amount}
+              min={0.01}
+              max={10_000}
               onChange={handleChange}
               required
           />
