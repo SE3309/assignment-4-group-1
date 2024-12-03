@@ -22,6 +22,7 @@ router.put('/staff/:id', staff_controller.update);
 router.delete('/staff/:id', staff_controller.delete);
 
 router.post('/transfer', transaction_controller.transfer);
+router.get('/transaction', transaction_controller.findAll);
 
 router.post('/loan', loan_controller.create);
 

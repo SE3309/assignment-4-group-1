@@ -23,3 +23,11 @@ exports.transfer = async (req, res) => {
   .then(() => res.status(200).json({message: 'Transfer successful.'}))
   .catch(() => res.status(500).json({message: 'An error occurred during the transfer.'}));
 }
+
+exports.findAll = (req, res) => {
+
+  const client = JSON.parse(req.headers.authorization);
+  db.findAllTransactions(client.id)
+  .then(transactions => res.status(200).json(transactions))
+  .catch(() => res.status(500).json({message: 'An error occurred while fetching transactions.'}));
+}

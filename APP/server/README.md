@@ -456,7 +456,7 @@ Content status code.
 
 <span style="color:green">204</span> No Content
 
-## Funds Transfer API
+## Transactions API
 
 ### Transfer Funds
 
@@ -496,6 +496,60 @@ Transfers funds from one account to another account.
 #### Response
 
 <span style="color:green">200</span> Loan application submitted successfully!
+
+### Get Transactions
+
+`GET /api/transactions`
+
+Gets all transactions for the client with the given ID. The response will include the transaction ID, amount, date and
+time, status, account ID, and merchant name. The transactions are sorted by date and time in descending order.
+
+#### Response
+
+```json
+[
+  {
+    "transaction_id": "99bd58b1-9afd-474f-b628-46d19d70620c",
+    "amount": "$16.00",
+    "datetime": "2024-12-03T15:56:43.650Z",
+    "status": "paid",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "merchant_name": "yes"
+  },
+  {
+    "transaction_id": "75488f79-c78f-42b6-9a17-46a86449b682",
+    "amount": "$14.00",
+    "datetime": "2024-12-03T15:56:43.650Z",
+    "status": "paid",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "merchant_name": "Amazon"
+  },
+  {
+    "transaction_id": "62cad73b-e8ba-46bc-8104-8d87ac1b9fc5",
+    "amount": "$14.00",
+    "datetime": "2024-12-03T15:56:43.650Z",
+    "status": "paid",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "merchant_name": "Google"
+  },
+  {
+    "transaction_id": "6f8c0bd5-a84c-4fb0-b631-2d0c7b9982ab",
+    "amount": "$13.00",
+    "datetime": "2024-12-03T15:56:43.650Z",
+    "status": "paid",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "merchant_name": "xyz"
+  },
+  {
+    "transaction_id": "2e979fe5-0faf-46b2-b9f8-478828d65cd0",
+    "amount": "$12.00",
+    "datetime": "2024-12-03T15:56:43.650Z",
+    "status": "paid",
+    "account_id": "c9a1d1d2-8e2b-46b5-8ed3-e9e2f1bbc9f2",
+    "merchant_name": "abc"
+  }
+]
+```
 
 ## Statement API
 

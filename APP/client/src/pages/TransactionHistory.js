@@ -6,19 +6,29 @@ const TransactionHistory = () => {
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
-    transactionType: '',
     minAmount: '',
     maxAmount: '',
   });
 
-  // Fetch transactions (simulate API call)
   useEffect(() => {
+    const client = JSON.parse(sessionStorage.getItem('client'));
+    if (!client) {
+      window.location.href = '/login';
+    }
+
     const fetchTransactions = async () => {
-      const response = await fetch('/api/transactions'); // Replace with real API
-      const data = await response.json();
-      setTransactions(data);
+      const response = await fetch('http://localhost:3000/api/transaction',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': JSON.stringify(client),
+            }
+          });
+      return await response.json();
     };
-    fetchTransactions().then(r => console.log(r));
+
+    fetchTransactions().then(data => setTransactions(data));
   }, []);
 
   // Handle filter changes
@@ -28,20 +38,17 @@ const TransactionHistory = () => {
 
   // Filter transactions
   const filteredTransactions = transactions.filter((transaction) => {
-    const {startDate, endDate, transactionType, minAmount, maxAmount} = filters;
-    const date = new Date(transaction.date);
+    const {startDate, endDate, minAmount, maxAmount} = filters;
+    const date = new Date(transaction.datetime);
 
-    const matchesDate = (!startDate || date >= new Date(startDate)) &&
-        (!endDate || date <= new Date(endDate));
+    const matchesDate = (!startDate || date >= new Date(`${startDate}T05:00:00Z`)) &&
+        (!endDate || date <= new Date(`${endDate}T05:00:00Z`));
 
-    const matchesType = !transactionType || transaction.type.toLowerCase() ===
-        transactionType.toLowerCase();
+    const matchesAmount =
+        (!minAmount || parseFloat(transaction.amount.substring(1)) >= parseFloat(minAmount)) &&
+        (!maxAmount || parseFloat(transaction.amount.substring(1)) <= parseFloat(maxAmount));
 
-    const matchesAmount = (!minAmount || transaction.amount >=
-            parseFloat(minAmount)) &&
-        (!maxAmount || transaction.amount <= parseFloat(maxAmount));
-
-    return matchesDate && matchesType && matchesAmount;
+    return matchesDate && matchesAmount;
   });
 
   return (
@@ -68,19 +75,6 @@ const TransactionHistory = () => {
           />
         </div>
         <div className="filter-group">
-          <label>Transaction Type:</label>
-          <select
-              name="transactionType"
-              value={filters.transactionType}
-              onChange={handleFilterChange}
-          >
-            <option value="">All</option>
-            <option value="deposit">Deposit</option>
-            <option value="withdrawal">Withdrawal</option>
-            <option value="transfer">Transfer</option>
-          </select>
-        </div>
-        <div className="filter-group">
           <label>Min Amount:</label>
           <input
               type="number"
@@ -103,17 +97,17 @@ const TransactionHistory = () => {
         <thead>
         <tr>
           <th>Date</th>
-          <th>Type</th>
+          <th>Status</th>
           <th>Amount</th>
-          <th>Description</th>
+          <th>Merchant</th>
         </tr>
         </thead>
         <tbody>
-        {filteredTransactions.map((transaction) => (<tr key={transaction.id}>
-              <td>{new Date(transaction.date).toLocaleDateString()}</td>
-              <td>{transaction.type}</td>
-              <td>${transaction.amount.toFixed(2)}</td>
-              <td>{transaction.description}</td>
+        {filteredTransactions.map((transaction) => (<tr key={transaction.transaction_id}>
+              <td>{new Date(transaction.datetime).toLocaleDateString()}</td>
+              <td>{transaction.status}</td>
+              <td>{transaction.amount}</td>
+              <td>{transaction.merchant_name}</td>
             </tr>))}
         </tbody>
       </table>
